@@ -1,5 +1,6 @@
 package com.art.task4.data
 
+import com.art.task4.data.photosearch.PhotoSearchService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

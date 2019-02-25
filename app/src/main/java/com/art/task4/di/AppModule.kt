@@ -1,26 +1,30 @@
 package com.art.task4.di
 
-import com.art.task4.data.PhotoSearchRepositoryImpl
+import com.art.task4.data.photosearch.PhotoSearchRepositoryImpl
+import com.art.task4.data.photosearch.PhotoSearchService
 import com.art.task4.data.RequestClient
-import com.art.task4.domain.PhotoSearchRepository
-import com.art.task4.domain.PhotoSearchUseCase
-import com.art.task4.presenter.PhotoAdapter
+import com.art.task4.domain.photosearch.PhotoSearchRepository
+import com.art.task4.domain.photosearch.PhotoSearchUseCase
+import com.art.task4.presenter.photosearch.PhotoAdapter
 import com.art.task4.presenter.PhotoLoader
-import com.art.task4.presenter.PhotoSearchViewModel
+import com.art.task4.presenter.photosearch.PhotoSearchViewModel
 import org.koin.android.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.applicationContext
 import org.koin.dsl.module.module
 
-val appModule = module {
-    single { RequestClient() }
+private val appModule = module {
     single { PhotoLoader(get()) }
-
-
-    module("photo_search") {
-        factory { PhotoAdapter(get()) }
-        factory<PhotoSearchRepository> { PhotoSearchRepositoryImpl(get()) }
-        factory { PhotoSearchUseCase(get()) }
-
-        viewModel { PhotoSearchViewModel(get()) }
-    }
 }
+
+private val photoSearchModule = module {
+    factory { PhotoAdapter(get()) }
+
+    factory<PhotoSearchRepository> { PhotoSearchRepositoryImpl(photoSearchService) }
+    factory { PhotoSearchUseCase(get()) }
+    viewModel { PhotoSearchViewModel(get()) }
+}
+
+private val requestClient = RequestClient()
+private val photoSearchService: PhotoSearchService = requestClient.photoRequestService
+
+
+val modules = listOf(appModule, photoSearchModule)

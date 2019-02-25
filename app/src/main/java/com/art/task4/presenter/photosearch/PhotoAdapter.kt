@@ -1,4 +1,4 @@
-package com.art.task4.presenter
+package com.art.task4.presenter.photosearch
 
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
@@ -8,13 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.art.task4.R
+import com.art.task4.domain.photosearch.model.PhotoData
+import com.art.task4.presenter.PhotoLoader
 
 class PhotoAdapter(
     private val photoLoader: PhotoLoader
 ) : PagedListAdapter<PhotoData, PhotoAdapter.PhotoViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(container: ViewGroup, viewType: Int): PhotoViewHolder {
-        val view = LayoutInflater.from(container.context).inflate(R.layout.item_photo, container, false)
+        val view = LayoutInflater.from(container.context)
+                .inflate(R.layout.item_photo, container, false)
 
         return PhotoViewHolder(view)
     }
@@ -22,7 +25,7 @@ class PhotoAdapter(
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val photo = getItem(position)
         photo?.let {
-            photoLoader.loadPhoto(holder.image, photo.url)
+            photoLoader.loadPhoto(holder.image, photo.link)
         }
     }
 
@@ -36,8 +39,7 @@ class PhotoAdapter(
             override fun areItemsTheSame(
                 oldPhotoData: PhotoData,
                 newPhotoData: PhotoData
-            ): Boolean =
-                oldPhotoData.url == newPhotoData.url
+            ): Boolean = oldPhotoData.id == newPhotoData.id
 
             override fun areContentsTheSame(
                 oldPhotoData: PhotoData,

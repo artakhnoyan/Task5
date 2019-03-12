@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -19,12 +20,14 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
     private val photoSearchViewModel: PhotoSearchViewModel by viewModel()
     private val photoAdapter: PhotoAdapter by inject()
+    private lateinit var layoutManager: GridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        layoutManager = GridLayoutManager(this, 3)
         photo_list.adapter = photoAdapter
-        photo_list.layoutManager = GridLayoutManager(this, 3)
+        photo_list.layoutManager = layoutManager
         photoSearchViewModel.photos.observe(this, Observer {
             photoAdapter.submitList(it)
         })
@@ -55,6 +58,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.one_column -> layoutManager.spanCount = 1
+            R.id.two_column -> layoutManager.spanCount = 2
+            R.id.three_column -> layoutManager.spanCount = 3
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showLoading() {

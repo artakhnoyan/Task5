@@ -2,6 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/one_column"
+        android:title="@string/one_column" />
+    <item
+        android:id="@+id/two_column"
+        android:title="@string/two_column" />
+    <item
+        android:id="@+id/three_column"
+        android:title="@string/three_column" />
+    <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search"
         android:title="@string/search_title"
